@@ -18,13 +18,15 @@
   }
 </script>
 
-<aside class="flex flex-col w-64 bg-white border-r border-gray-200 h-screen fixed left-0 top-0">
-  <div class="flex items-center justify-center h-16 border-b border-gray-200 px-4">
+<aside class="flex flex-col w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen fixed left-0 top-0 transition-colors duration-300">
+  <div class="flex items-center justify-center h-16 border-b border-gray-200 dark:border-gray-800 px-4">
     <div class="flex items-center gap-2">
-      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-        <span class="text-white font-bold text-xl leading-none">B</span>
+      <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+        </svg>
       </div>
-      <span class="text-xl font-bold text-gray-900">Tinyamy</span>
+      <span class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Sniip</span>
     </div>
   </div>
 
@@ -32,10 +34,10 @@
     {#each navItems as item}
       <a
         href={item.href}
-        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {isActive(item.href) ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}"
+        class="flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors {isActive(item.href) ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'}"
       >
         <svg
-          class="w-5 h-5 mr-3 {isActive(item.href) ? 'text-blue-600' : 'text-gray-400'}"
+          class="w-5 h-5 mr-3 {isActive(item.href) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -47,14 +49,14 @@
     {/each}
   </nav>
 
-  <div class="p-4 border-t border-gray-200">
+  <div class="p-4 border-t border-gray-200 dark:border-gray-800">
     {#if $authStore.user}
       <div class="flex items-center mb-4">
-        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold mr-3">
+        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold mr-3">
           {$authStore.user.email?.[0].toUpperCase() || 'U'}
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-medium text-gray-900 truncate">
+          <p class="text-xs font-medium text-gray-900 dark:text-gray-200 truncate">
             {$authStore.user.email}
           </p>
         </div>
@@ -62,7 +64,7 @@
     {/if}
     <button
       onclick={logout}
-      class="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+      class="w-full flex items-center px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
     >
       <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>

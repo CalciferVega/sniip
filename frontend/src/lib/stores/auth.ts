@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { onAuthStateChanged, type User, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase.js';
 
 interface AuthState {
@@ -40,6 +40,49 @@ export const loginWithGoogle = async () => {
       errorMessage = 'A network error occurred. Please check your connection.';
     }
 
+    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    throw error;
+  }
+};
+
+/**
+ * Sign up with email and password
+ */
+export const signupWithEmail = async (email: string, pass: string, name: string) => {
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    const result = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(result.user, { displayName: name });
+    return result.user;
+  } catch (error: any) {
+    let errorMessage = 'Failed to create account. Please try again.';
+    if (error.code === 'auth/email-already-in-use') {
+      errorMessage = 'This email is already registered.';
+    } else if (error.code === 'auth/weak-password') {
+      errorMessage = 'Password should be at least 6 characters.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email address.';
+    }
+    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    throw error;
+  }
+};
+
+/**
+ * Login with email and password
+ */
+export const loginWithEmail = async (email: string, pass: string) => {
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    const result = await signInWithEmailAndPassword(auth, email, pass);
+    return result.user;
+  } catch (error: any) {
+    let errorMessage = 'Invalid email or password.';
+    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+      errorMessage = 'Invalid email or password.';
+    } else if (error.code === 'auth/too-many-requests') {
+      errorMessage = 'Too many failed login attempts. Please try again later.';
+    }
     authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
     throw error;
   }

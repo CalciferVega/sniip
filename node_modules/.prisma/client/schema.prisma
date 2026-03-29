@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  ACTIVE
+  ARCHIVED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  links     Link[]
+
+  @@map("users")
+}
+
+model Link {
+  id              String            @id @default(uuid())
+  userId          String            @map("user_id")
+  originalUrl     String            @map("original_url")
+  shortSlug       String            @unique @map("short_slug")
+  title           String?
+  tags            String[]
+  status          Status            @default(ACTIVE)
+  createdAt       DateTime          @default(now())
+  user            User              @relation(fields: [userId], references: [id])
+  qrCodes         QrCode[]
+  clicksAnalytics ClicksAnalytics[]
+
+  @@index([shortSlug])
+  @@map("links")
+}
+
+model QrCode {
+  id           String @id @default(uuid())
+  linkId       String @map("link_id")
+  designConfig Json   @map("design_config")
+  imageUrl     String @map("image_url")
+  link         Link   @relation(fields: [linkId], references: [id])
+
+  @@map("qr_codes")
+}
+
+model ClicksAnalytics {
+  id        String   @id @default(uuid())
+  linkId    String   @map("link_id")
+  clickedAt DateTime @default(now()) @map("clicked_at")
+  country   String?
+  device    String?
+  referrer  String?
+  link      Link     @relation(fields: [linkId], references: [id])
+
+  @@map("clicks_analytics")
+}

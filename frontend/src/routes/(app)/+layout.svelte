@@ -17,7 +17,7 @@
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
   </div>
 {:else if $authStore.user}
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex transition-colors duration-300">
     <Sidebar />
     <main class="flex-1 ml-64 p-8">
       {@render children()}

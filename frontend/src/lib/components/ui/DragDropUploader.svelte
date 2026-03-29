@@ -112,20 +112,22 @@
   
   <div
     class="flex flex-col items-center justify-center min-h-[220px] rounded-2xl border-2 border-dashed transition-all duration-300
-    {isDragging ? 'border-blue-500 bg-blue-50/50' : 'border-slate-200 bg-slate-50/30 hover:border-blue-400 hover:bg-white hover:shadow-lg hover:shadow-blue-500/5'}"
+    {isDragging 
+      ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20' 
+      : 'border-slate-200 dark:border-gray-800 bg-slate-50/30 dark:bg-gray-800/20 hover:border-blue-400 dark:hover:border-blue-500 hover:bg-white dark:hover:bg-gray-800 hover:shadow-lg dark:hover:shadow-blue-900/10'}"
   >
     {#if !selectedFile}
       <div class="flex flex-col items-center text-center p-6 space-y-4" in:fade>
-        <div class="w-14 h-14 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center text-blue-600 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+        <div class="w-14 h-14 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-100 dark:border-gray-700 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
           <Upload class="w-6 h-6" />
         </div>
         <div class="space-y-1">
-          <p class="text-slate-900 font-bold">{title}</p>
-          <p class="text-slate-500 text-sm font-medium">{subtitle}</p>
+          <p class="text-slate-900 dark:text-white font-bold">{title}</p>
+          <p class="text-slate-500 dark:text-gray-400 text-sm font-medium">{subtitle}</p>
         </div>
         {#if helperText}
-          <div class="px-3 py-1 bg-slate-100 rounded-full">
-            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">{helperText}</span>
+          <div class="px-3 py-1 bg-slate-100 dark:bg-gray-800 rounded-full">
+            <span class="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500">{helperText}</span>
           </div>
         {/if}
       </div>
@@ -135,13 +137,13 @@
           <FileText class="w-8 h-8" />
         </div>
         <div class="space-y-1 max-w-full">
-          <p class="text-slate-900 font-bold truncate px-4">{selectedFile.name}</p>
-          <p class="text-slate-400 text-xs font-bold uppercase tracking-wider">{formatFileSize(selectedFile.size)}</p>
+          <p class="text-slate-900 dark:text-white font-bold truncate px-4">{selectedFile.name}</p>
+          <p class="text-slate-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider">{formatFileSize(selectedFile.size)}</p>
         </div>
         
         <button
           onclick={removeFile}
-          class="flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors group/btn"
+          class="flex items-center gap-2 px-4 py-2 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-lg transition-colors group/btn"
         >
           <Trash2 class="w-3.5 h-3.5 group-hover/btn:shake" />
           Remove file

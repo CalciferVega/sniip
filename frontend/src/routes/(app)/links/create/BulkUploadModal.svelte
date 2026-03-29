@@ -30,19 +30,19 @@
 
 <dialog
   bind:this={dialogElement}
-  class="relative p-0 rounded-2xl bg-white shadow-2xl border-none max-w-lg w-full overflow-hidden backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm animate-in fade-in zoom-in duration-200"
+  class="relative p-0 rounded-2xl bg-white dark:bg-gray-900 shadow-2xl border-none max-w-lg w-full overflow-hidden backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm animate-in fade-in zoom-in duration-200"
   onclose={resetState}
 >
   <div class="p-6 sm:p-8 space-y-6">
     <!-- Header -->
     <header class="flex items-center justify-between">
       <div class="space-y-1">
-        <h2 class="text-xl font-bold text-slate-900">Bulk upload links</h2>
-        <p class="text-sm text-slate-500 font-medium">Upload a CSV file to generate multiple links at once.</p>
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Bulk upload links</h2>
+        <p class="text-sm text-slate-500 dark:text-gray-400 font-medium">Upload a CSV file to generate multiple links at once.</p>
       </div>
       <button 
         onclick={closeModal}
-        class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition-all active:scale-95"
+        class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-xl transition-all active:scale-95"
       >
         <X class="w-5 h-5" />
       </button>
@@ -59,7 +59,7 @@
     />
 
     <!-- Alert for CSV Format -->
-    <div class="bg-amber-50 border border-amber-100 p-4 rounded-xl flex gap-3 text-amber-800">
+    <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-900/30 p-4 rounded-xl flex gap-3 text-amber-800 dark:text-amber-400">
         <AlertCircle class="w-5 h-5 flex-shrink-0 mt-0.5" />
         <div class="space-y-1">
             <p class="text-sm font-bold">Important format note</p>
@@ -71,14 +71,14 @@
     <footer class="flex items-center justify-end gap-3 pt-2">
       <button
         onclick={closeModal}
-        class="px-6 py-2.5 text-sm font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"
+        class="px-6 py-2.5 text-sm font-bold text-slate-500 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-gray-800 rounded-xl transition-all"
       >
         Cancel
       </button>
       <button
         onclick={handleUpload}
         disabled={!selectedFile}
-        class="px-8 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95"
+        class="px-8 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 dark:disabled:bg-gray-800 disabled:text-slate-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95"
       >
         Upload and Generate
       </button>
