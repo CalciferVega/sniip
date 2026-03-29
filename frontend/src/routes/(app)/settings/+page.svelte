@@ -1,0 +1,2 @@
+<h1 class="text-2xl font-bold text-gray-900">Account Settings</h1>
+<p class="text-gray-600 mt-2">Placeholder for profile and role management.</p>
