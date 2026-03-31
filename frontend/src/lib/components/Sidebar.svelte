@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { authStore, logout } from '$lib/stores/auth.js';
+  import UsageLimit from './UsageLimit.svelte';
 
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -51,7 +52,8 @@
 
   <div class="p-4 border-t border-gray-200 dark:border-gray-800">
     {#if $authStore.user}
-      <div class="flex items-center mb-4">
+      <UsageLimit used={2} total={25} plan="free" />
+      <div class="flex items-center mt-6 mb-4">
         <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold mr-3">
           {$authStore.user.email?.[0].toUpperCase() || 'U'}
         </div>
