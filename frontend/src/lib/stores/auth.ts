@@ -1,5 +1,34 @@
 import { writable } from 'svelte/store';
-import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
+import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword as firebaseUpdatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+
+/**
+ * Update user password
+ */
+export const updatePassword = async (newPass: string, currentPass: string) => {
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    const user = auth.currentUser;
+    if (!user || !user.email) throw new Error('No user logged in');
+
+    // Re-authenticate user before updating password
+    const credential = EmailAuthProvider.credential(user.email, currentPass);
+    await reauthenticateWithCredential(user, credential);
+
+    await firebaseUpdatePassword(user, newPass);
+    authStore.update((s) => ({ ...s, loading: false, error: null }));
+  } catch (error: any) {
+    let errorMessage = 'Failed to update password. Please try again.';
+    if (error.code === 'auth/wrong-password') {
+      errorMessage = 'The current password you entered is incorrect.';
+    } else if (error.code === 'auth/weak-password') {
+      errorMessage = 'The new password is too weak. Please use at least 6 characters.';
+    } else if (error.code === 'auth/requires-recent-login') {
+      errorMessage = 'Please log in again to change your password.';
+    }
+    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    throw error;
+  }
+};
 import { auth, googleProvider } from '../firebase.js';
 
 interface AuthState {
