@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { ArrowRight } from 'lucide-svelte';
   interface Props {
     used: number;
     total: number;
@@ -37,9 +38,7 @@
         class="w-full py-2.5 px-3 text-xs font-black text-amber-950 bg-amber-400 hover:bg-amber-300 dark:bg-amber-500 dark:hover:bg-amber-400 rounded-xl transition-all shadow-lg shadow-amber-500/20 active:scale-[0.98] flex items-center justify-center gap-2 group relative overflow-hidden cursor-pointer"
       >
         <span class="relative z-10">Upgrade to Pro</span>
-        <svg class="w-3.5 h-3.5 relative z-10 transform group-hover:translate-x-0.5 transition-transform text-amber-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-        </svg>
+        <ArrowRight class="w-3.5 h-3.5 relative z-10 transform group-hover:translate-x-0.5 transition-transform text-amber-950" strokeWidth={3} />
         <div class="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
       </button>
     {/if}

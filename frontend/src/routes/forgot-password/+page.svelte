@@ -2,6 +2,7 @@
   import { resetPassword, authStore } from '$lib/stores/auth';
   import { toast } from '$lib/stores/toast.svelte';
   import { fade } from 'svelte/transition';
+  import { Check, Loader2 } from 'lucide-svelte';
 
   let email = $state('');
   let success = $state(false);
@@ -35,9 +36,7 @@
       {#if success}
         <div in:fade class="text-center space-y-4">
           <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 dark:bg-green-900/30">
-            <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+            <Check class="h-6 w-6 text-green-600 dark:text-green-400" />
           </div>
           <h3 class="text-lg font-medium text-gray-900 dark:text-white">Check your email</h3>
           <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -77,10 +76,7 @@
             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {#if $authStore.loading}
-              <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+              <Loader2 class="w-5 h-5 animate-spin" />
               Sending link...
             {:else}
               Send reset link

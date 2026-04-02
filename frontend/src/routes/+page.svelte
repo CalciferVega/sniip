@@ -3,6 +3,7 @@
   import InteractiveBackground from '$lib/components/InteractiveBackground.svelte';
   import { authStore } from '$lib/stores/auth';
   import { goto } from '$app/navigation';
+  import { Check, QrCode, Tag, Video, BarChart3, Link } from 'lucide-svelte';
 
   $effect(() => {
     if ($authStore.user) {
@@ -74,19 +75,19 @@
           <ul class="space-y-4">
             <li class="flex items-center gap-3">
               <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-4 h-4" strokeWidth={3} />
               </div>
               <span class="font-medium dark:text-gray-200">Custom branded domains</span>
             </li>
             <li class="flex items-center gap-3">
               <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-4 h-4" strokeWidth={3} />
               </div>
               <span class="font-medium dark:text-gray-200">Real-time engagement analytics</span>
             </li>
             <li class="flex items-center gap-3">
               <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-4 h-4" strokeWidth={3} />
               </div>
               <span class="font-medium dark:text-gray-200">Bulk link creation via CSV</span>
             </li>
@@ -100,7 +101,7 @@
                 <div class="h-4 w-1/2 bg-gray-100 dark:bg-gray-700 rounded"></div>
               </div>
               <div class="h-32 bg-blue-50 dark:bg-blue-900/20 rounded-xl border-2 border-dashed border-blue-200 dark:border-blue-800 flex items-center justify-center">
-                 <svg class="w-16 h-16 text-blue-200 dark:text-blue-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 17h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+                 <QrCode class="w-16 h-16 text-blue-200 dark:text-blue-800" strokeWidth={1.5} />
               </div>
            </div>
            <div class="absolute bottom-12 right-12 w-48 h-16 bg-blue-600 rounded-lg shadow-xl flex items-center justify-center text-white font-bold">
@@ -121,21 +122,21 @@
       <div class="grid md:grid-cols-3 gap-8">
         <div class="bg-gray-800 dark:bg-gray-900 p-8 rounded-2xl hover:bg-gray-750 dark:hover:bg-gray-800/80 transition-colors border border-gray-700 dark:border-gray-800">
           <div class="w-12 h-12 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+            <Tag class="w-6 h-6" />
           </div>
           <h3 class="text-xl font-bold mb-3">Retail & Print</h3>
           <p class="text-gray-400 leading-relaxed">Dynamic QR codes for packaging, posters, and in-store displays that can be updated after printing.</p>
         </div>
         <div class="bg-gray-800 dark:bg-gray-900 p-8 rounded-2xl hover:bg-gray-750 dark:hover:bg-gray-800/80 transition-colors border border-gray-700 dark:border-gray-800">
           <div class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            <Video class="w-6 h-6" />
           </div>
           <h3 class="text-xl font-bold mb-3">Social Media</h3>
           <p class="text-gray-400 leading-relaxed">Short, memorable links for Instagram bios, YouTube descriptions, and Twitter threads.</p>
         </div>
         <div class="bg-gray-800 dark:bg-gray-900 p-8 rounded-2xl hover:bg-gray-750 dark:hover:bg-gray-800/80 transition-colors border border-gray-700 dark:border-gray-800">
           <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-xl flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <BarChart3 class="w-6 h-6" />
           </div>
           <h3 class="text-xl font-bold mb-3">Enterprise IT</h3>
           <p class="text-gray-400 leading-relaxed">SSO integration, team permissions, and API access for high-volume automated shortening.</p>
@@ -163,15 +164,15 @@
           <div class="text-4xl font-extrabold mb-8 dark:text-white relative">$0<span class="text-lg font-medium text-gray-400">/mo</span></div>
           <ul class="space-y-4 mb-10 flex-grow relative">
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               25 links per month
             </li>
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               Basic analytics
             </li>
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               Standard QR codes
             </li>
           </ul>
@@ -200,19 +201,19 @@
             <div class="text-4xl font-extrabold mb-8 text-blue-600 dark:text-blue-400 relative">$19<span class="text-lg font-medium text-slate-400">/mo</span></div>
             <ul class="space-y-4 mb-10 flex-grow relative">
               <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-5 h-5 text-blue-500" />
                 1,000 links per month
               </li>
               <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-5 h-5 text-blue-500" />
                 Advanced geolocation
               </li>
               <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-5 h-5 text-blue-500" />
                 Custom logo QR codes
               </li>
               <li class="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                <Check class="w-5 h-5 text-blue-500" />
                 No ads on redirect
               </li>
             </ul>
@@ -233,19 +234,19 @@
           <div class="text-4xl font-extrabold mb-8 dark:text-white relative">$99<span class="text-lg font-medium text-gray-400">/mo</span></div>
           <ul class="space-y-4 mb-10 flex-grow relative">
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               3,000 links per month
             </li>
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               Team collaboration
             </li>
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               Bulk CSV importing
             </li>
             <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
-              <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <Check class="w-5 h-5 text-emerald-500" />
               Priority support
             </li>
           </ul>
@@ -272,7 +273,7 @@
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+          <Link class="w-5 h-5 text-white" strokeWidth={2.5} />
         </div>
         <span class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Sniip</span>
       </div>

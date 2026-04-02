@@ -4,6 +4,7 @@
   import MobileHeader from '$lib/components/MobileHeader.svelte';
   import { authStore } from '$lib/stores/auth.js';
   import { goto } from '$app/navigation';
+  import { Menu, X, Loader2 } from 'lucide-svelte';
 
   let { children } = $props();
   let isMobileNavOpen = $state(false);
@@ -17,7 +18,7 @@
 
 {#if $authStore.loading}
   <div class="flex items-center justify-center min-h-screen">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <Loader2 class="h-12 w-12 animate-spin text-blue-600" />
   </div>
 {:else if $authStore.user}
   <div class="min-h-screen bg-gray-50 dark:bg-gray-950 flex transition-colors duration-300 relative overflow-x-hidden">
@@ -35,14 +36,10 @@
     >
       <div class="relative w-5 h-5">
         <div class="absolute inset-0 flex items-center justify-center transition-all duration-500 {isMobileNavOpen ? 'rotate-180 opacity-0 scale-0' : 'rotate-0 opacity-100 scale-100'}">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          <Menu class="w-5 h-5" strokeWidth={2.5} />
         </div>
         <div class="absolute inset-0 flex items-center justify-center transition-all duration-500 {!isMobileNavOpen ? '-rotate-180 opacity-0 scale-0' : 'rotate-0 opacity-100 scale-100'}">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X class="w-5 h-5" strokeWidth={2.5} />
         </div>
       </div>
     </button>
