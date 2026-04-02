@@ -3,6 +3,7 @@
   import { toast } from '$lib/stores/toast.svelte';
   import { fade } from 'svelte/transition';
   import { Check, Loader2 } from 'lucide-svelte';
+  import AuthHeader from '$lib/components/AuthHeader.svelte';
 
   let email = $state('');
   let success = $state(false);
@@ -20,6 +21,8 @@
     }
   }
 </script>
+
+<AuthHeader />
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 py-12 sm:px-6 lg:px-8 transition-colors duration-300">
   <div class="max-w-md w-full space-y-8 flex flex-col items-center">

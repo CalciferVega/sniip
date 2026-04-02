@@ -1,7 +1,10 @@
 <script lang="ts">
   import GoogleButton from '$lib/components/GoogleButton.svelte';
   import EmailLogin from '$lib/components/EmailLogin.svelte';
+  import AuthHeader from '$lib/components/AuthHeader.svelte';
 </script>
+
+<AuthHeader />
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 py-12 sm:px-6 lg:px-8 transition-colors duration-300">
   <div class="max-w-md w-full space-y-8 flex flex-col items-center">
