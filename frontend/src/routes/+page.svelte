@@ -1,5 +1,6 @@
 <script lang="ts">
   import Navbar from '$lib/components/Navbar.svelte';
+  import InteractiveBackground from '$lib/components/InteractiveBackground.svelte';
   import { authStore } from '$lib/stores/auth';
   import { goto } from '$app/navigation';
 
@@ -18,8 +19,10 @@
   <Navbar />
 
   <!-- Hero Section -->
-  <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-gray-950">
-    <div class="max-w-5xl mx-auto text-center">
+  <header class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-blue-50/50 to-white dark:from-blue-950/20 dark:to-gray-950 overflow-hidden">
+    <InteractiveBackground />
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+
       <div class="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-1.5 rounded-full text-sm font-semibold mb-8 animate-fade-in border border-blue-200 dark:border-blue-800">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
