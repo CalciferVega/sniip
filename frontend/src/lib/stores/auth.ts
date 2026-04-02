@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase.js';
 
 interface AuthState {
@@ -82,6 +82,26 @@ export const loginWithEmail = async (email: string, pass: string) => {
       errorMessage = 'Invalid email or password.';
     } else if (error.code === 'auth/too-many-requests') {
       errorMessage = 'Too many failed login attempts. Please try again later.';
+    }
+    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    throw error;
+  }
+};
+
+/**
+ * Send password reset email
+ */
+export const resetPassword = async (email: string) => {
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    await sendPasswordResetEmail(auth, email);
+    authStore.update((s) => ({ ...s, loading: false, error: null }));
+  } catch (error: any) {
+    let errorMessage = 'Failed to send reset email. Please try again.';
+    if (error.code === 'auth/user-not-found') {
+      errorMessage = 'No account found with this email.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email address.';
     }
     authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
     throw error;
