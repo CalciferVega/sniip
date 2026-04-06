@@ -1,8 +1,11 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
+config({ override: true });
 import Fastify from 'fastify';
 import authMiddleware from './middleware/auth.js';
 import redirectionRoutes from './routes/redirection.js';
 import linksRoutes from './routes/links.js';
+import analyticsRoutes from './routes/analytics.js';
+import dashboardRoutes from './routes/dashboard.js';
 
 const fastify = Fastify({
   logger: true,
@@ -30,6 +33,12 @@ fastify.register(async (apiInstance) => {
   
   // Register link management routes under /api/links
   apiInstance.register(linksRoutes, { prefix: '/links' });
+
+  // Register analytics routes under /api/analytics
+  apiInstance.register(analyticsRoutes, { prefix: '/analytics' });
+
+  // Register dashboard routes under /api/dashboard
+  apiInstance.register(dashboardRoutes, { prefix: '/dashboard' });
   
   // Note: Future epics like QR Codes or Settings would also go here
 }, { prefix: '/api' });

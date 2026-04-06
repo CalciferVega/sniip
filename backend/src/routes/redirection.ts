@@ -5,58 +5,85 @@ interface RedirectionParams {
   slug: string;
 }
 
+/**
+ * Public redirection routes.
+ * These routes are handled outside the /api prefix for ultra-fast redirection.
+ */
 export default async function redirectionRoutes(fastify: FastifyInstance) {
+  // GET /:slug - Redirect to the original URL
   fastify.get('/:slug', async (request: FastifyRequest<{ Params: RedirectionParams }>, reply: FastifyReply) => {
     const { slug } = request.params;
 
+    // Fast-path: Skip database if the slug is obviously invalid
+    if (!slug || slug.length < 3) {
+      return reply.status(404).send({ error: 'Link not found' });
+    }
+
     try {
       // 1. Fetch the original URL from the database
-      // High performance target: This query is indexed on short_slug
+      // The shortSlug is indexed for sub-50ms query performance.
       const link = await prisma.link.findUnique({
         where: { shortSlug: slug },
         select: { id: true, originalUrl: true, status: true },
       });
 
-      if (!link || link.status === 'ARCHIVED') {
-        return reply.status(404).send({ error: 'Link not found or archived' });
+      // 2. Handle missing or inactive links
+      if (!link || link.status !== 'ACTIVE') {
+        return reply.status(404).send({ error: 'Link not found or no longer active' });
       }
 
-      // 2. Trigger asynchronous analytics (Non-blocking)
-      // We don't 'await' this call to ensure the redirect happens immediately (< 50ms target)
+      // 3. Trigger asynchronous analytics (Non-blocking)
+      // We don't 'await' this to prioritize redirection speed.
       recordAnalytics(link.id, request).catch((err) => {
-        request.log.error(`Analytics error for slug ${slug}:`, err);
+        fastify.log.error(`Analytics error for slug "${slug}":`, err);
       });
 
-      // 3. Perform the redirection (302 Found for temporary, 301 for permanent)
-      // We use 302 to ensure browsers keep hitting our server for analytics
+      // 4. Perform the redirection
+      // Use 302 Found to prevent aggressive browser caching and ensure 
+      // every click is recorded on our end.
       return reply.redirect(302, link.originalUrl);
     } catch (error) {
-      request.log.error(error);
-      return reply.status(500).send({ error: 'Internal server error' });
+      fastify.log.error(error);
+      return reply.status(500).send({ error: 'Internal server error while redirecting' });
     }
   });
 }
 
+import geoip from 'geoip-lite';
+
 /**
- * Background function to record click analytics
+ * Background function to record click analytics.
+ * Gathers user-agent, referrer, and other client data.
  */
 async function recordAnalytics(linkId: string, request: FastifyRequest) {
   const userAgent = request.headers['user-agent'] || '';
   const referrer = request.headers['referer'] || '';
   const ip = request.ip;
+  const isQr = (request.query as any).qr === '1' || (request.query as any).qr === 'true';
 
   // Simple device detection logic
   let device = 'desktop';
   if (/mobile/i.test(userAgent)) device = 'mobile';
   if (/tablet/i.test(userAgent)) device = 'tablet';
 
+  // Geolocation using IP (if not local)
+  let country = 'Unknown';
+  if (ip && ip !== '127.0.0.1' && ip !== '::1') {
+    const geo = geoip.lookup(ip);
+    if (geo) {
+      country = geo.country;
+    }
+  }
+
+  // We perform the database insert in the background
   await prisma.clicksAnalytics.create({
     data: {
       linkId,
+      ip,
+      isQr,
       device,
-      referrer: typeof referrer === 'string' ? referrer : undefined,
-      // Note: Real IP geolocation would happen here in a real-world scenario
-      country: 'Unknown',
+      referrer: typeof referrer === 'string' && referrer !== '' ? referrer : 'Direct',
+      country, 
     },
   });
 }

@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -20,16 +21,32 @@ enum Role {
 enum Status {
   ACTIVE
   ARCHIVED
+  DELETED
 }
 
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   role      Role     @default(USER)
+  planId    String   @map("plan_id")
   createdAt DateTime @default(now())
+  plan      Plan     @relation(fields: [planId], references: [id])
   links     Link[]
 
   @@map("users")
+}
+
+model Plan {
+  id              String   @id @default(uuid())
+  tierName        String   @unique @map("tier_name")
+  publicName      String   @map("public_name")
+  monthlyLinks    Int      @map("monthly_links")
+  monthlyQrCodes  Int      @map("monthly_qrcodes")
+  price           Float    @default(0)
+  createdAt       DateTime @default(now())
+  users           User[]
+
+  @@map("plans")
 }
 
 model Link {
@@ -63,6 +80,8 @@ model ClicksAnalytics {
   id        String   @id @default(uuid())
   linkId    String   @map("link_id")
   clickedAt DateTime @default(now()) @map("clicked_at")
+  ip        String?
+  isQr      Boolean  @default(false) @map("is_qr")
   country   String?
   device    String?
   referrer  String?

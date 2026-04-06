@@ -1,6 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import prisma from '../utils/prisma.js';
-import { slugGenerator } from '../services/slugGenerator.js';
+import { linkService } from '../services/linkService.js';
 
 interface CreateLinkBody {
   originalUrl: string;
@@ -11,7 +10,7 @@ interface CreateLinkBody {
 
 /**
  * Controller for creating a new short link.
- * Implements duplicate prevention, custom slug validation, and user synchronization.
+ * Delegates business logic to LinkService and handles HTTP-level concerns.
  */
 export const createLink = async (
   request: FastifyRequest<{ Body: CreateLinkBody }>,
@@ -20,101 +19,70 @@ export const createLink = async (
   const { originalUrl, customSlug, title, tags } = request.body;
   const user = request.user;
 
-  // This check is redundant due to authMiddleware but good for type safety
+  // Type safety check
   if (!user || !user.email) {
-    return reply.status(401).send({ error: 'Unauthorized: User email required' });
+    return reply.status(401).send({ error: 'Unauthorized: Authentication required' });
   }
 
   try {
-    // 1. Sync Firebase User with our Local Database
-    // We use email as the unique identifier to handle provider changes if needed
-    const dbUser = await prisma.user.upsert({
-      where: { email: user.email },
-      update: {}, 
-      create: {
-        id: user.uid,
-        email: user.email,
-        role: (user.role as any) || 'USER',
-      },
-    });
-
-    let shortSlug = customSlug;
-
-    // 2. Slug Validation and Generation
-    if (shortSlug) {
-      // Custom slug validation: check for availability
-      const existing = await prisma.link.findUnique({
-        where: { shortSlug },
-      });
-      if (existing) {
-        return reply.status(400).send({ error: 'Custom slug is already taken' });
-      }
-    } else {
-      // Auto-generate a unique Base62 slug
-      let isUnique = false;
-      let attempts = 0;
-      
-      while (!isUnique && attempts < 5) {
-        shortSlug = slugGenerator.generateRandom(6);
-        const existing = await prisma.link.findUnique({
-          where: { shortSlug },
-        });
-        if (!existing) {
-          isUnique = true;
-        }
-        attempts++;
-      }
-
-      if (!isUnique) {
-        return reply.status(500).send({ error: 'System busy: Could not generate a unique slug' });
-      }
-    }
-
-    // 3. Persist the Link
-    const link = await prisma.link.create({
-      data: {
-        userId: dbUser.id,
-        originalUrl,
-        shortSlug: shortSlug!,
-        title: title || originalUrl, // Default title to URL if not provided
-        tags: tags || [],
-        status: 'ACTIVE',
-      },
+    const link = await linkService.createLink({
+      userId: user.uid,
+      userEmail: user.email,
+      userRole: user.role as string,
+      originalUrl,
+      customSlug,
+      title,
+      tags
     });
 
     return reply.status(201).send(link);
   } catch (error: any) {
     request.log.error(error);
     
-    // Handle specific Prisma errors (like P2002 Unique Constraint)
+    // Business rule violations (like plan limits or collisions)
+    if (error.message.includes('Usage limit') || error.message.includes('Collision')) {
+      return reply.status(400).send({ error: error.message });
+    }
+
+    // Integrity violations (like P2002 Unique Constraint)
     if (error.code === 'P2002') {
       return reply.status(400).send({ error: 'The short slug is already in use' });
     }
 
-    return reply.status(500).send({ error: 'Internal server error while creating link' });
+    return reply.status(500).send({ error: 'Internal server error while processing link' });
   }
 };
 
 /**
- * Controller to list all links for the authenticated user.
+ * Controller to list all links for the authenticated user with optional search and filters.
  */
-export const listLinks = async (request: FastifyRequest, reply: FastifyReply) => {
+export const listLinks = async (
+  request: FastifyRequest<{
+    Querystring: {
+      search?: string;
+      status?: string;
+      startDate?: string;
+      endDate?: string;
+    };
+  }>,
+  reply: FastifyReply
+) => {
   const user = request.user;
-  if (!user) return reply.status(401).send({ error: 'Unauthorized' });
+  if (!user || !user.email) return reply.status(401).send({ error: 'Unauthorized' });
+
+  const { search, status, startDate, endDate } = request.query;
 
   try {
-    const links = await prisma.link.findMany({
-      where: {
-        user: {
-          email: user.email
-        }
-      },
-      orderBy: { createdAt: 'desc' },
+    const links = await linkService.getUserLinks({
+      email: user.email,
+      search,
+      status,
+      startDate,
+      endDate
     });
-
     return reply.send(links);
   } catch (error) {
     request.log.error(error);
-    return reply.status(500).send({ error: 'Internal server error' });
+    return reply.status(500).send({ error: 'Internal server error while fetching links' });
   }
 };
