@@ -304,7 +304,7 @@ export type PlanCreateInput = {
   monthlyQrCodes: number
   price?: number
   createdAt?: Date | string
-  users?: Prisma.UserCreateNestedManyWithoutPlanInput
+  users?: Prisma.UserCreateNestedManyWithoutPlanTierInput
 }
 
 export type PlanUncheckedCreateInput = {
@@ -315,7 +315,7 @@ export type PlanUncheckedCreateInput = {
   monthlyQrCodes: number
   price?: number
   createdAt?: Date | string
-  users?: Prisma.UserUncheckedCreateNestedManyWithoutPlanInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutPlanTierInput
 }
 
 export type PlanUpdateInput = {
@@ -326,7 +326,7 @@ export type PlanUpdateInput = {
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUpdateManyWithoutPlanNestedInput
+  users?: Prisma.UserUpdateManyWithoutPlanTierNestedInput
 }
 
 export type PlanUncheckedUpdateInput = {
@@ -337,7 +337,7 @@ export type PlanUncheckedUpdateInput = {
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  users?: Prisma.UserUncheckedUpdateManyWithoutPlanNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutPlanTierNestedInput
 }
 
 export type PlanCreateManyInput = {

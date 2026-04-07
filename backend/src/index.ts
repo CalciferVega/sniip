@@ -1,7 +1,8 @@
 import { config } from 'dotenv';
 config({ override: true });
 import Fastify from 'fastify';
-import authMiddleware from './middleware/auth.js';
+import cors from '@fastify/cors';
+import authMiddleware from './middlewares/authMiddleware.js';
 import redirectionRoutes from './routes/redirection.js';
 import linksRoutes from './routes/links.js';
 import analyticsRoutes from './routes/analytics.js';
@@ -12,6 +13,11 @@ const fastify = Fastify({
   // We enable trustProxy if we're behind a load balancer (common for enterprise)
   // to get the real client IP.
   trustProxy: true,
+});
+
+// Register CORS to allow requests from the frontend
+await fastify.register(cors, {
+  origin: true // In production, replace with your specific domain
 });
 
 const PORT = Number(process.env.PORT) || 3000;

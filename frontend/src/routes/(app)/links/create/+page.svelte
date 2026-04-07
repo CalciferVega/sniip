@@ -51,7 +51,8 @@
         body: JSON.stringify({
           originalUrl: destination,
           title: title || undefined,
-          customSlug: customSlug || undefined
+          customSlug: customSlug || undefined,
+          tags: tags.length > 0 ? tags : undefined
         })
       });
 

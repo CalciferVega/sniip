@@ -27,12 +27,13 @@ export class LinkService {
         id: userId,
         email: userEmail,
         role: (userRole as any) || 'USER',
-        plan: {
+        plan: 'free',
+        planTier: {
           connect: { tierName: 'FREE' },
         },
       },
       include: {
-        plan: true,
+        planTier: true,
         _count: {
           select: { links: true },
         },
@@ -40,8 +41,8 @@ export class LinkService {
     });
 
     // 2. Validate Plan Limits
-    if (user.plan && user._count.links >= user.plan.monthlyLinks) {
-      throw new Error(`Usage limit reached: Your current plan allows up to ${user.plan.monthlyLinks} links.`);
+    if (user.planTier && user._count.links >= user.planTier.monthlyLinks) {
+      throw new Error(`Usage limit reached: Your current plan allows up to ${user.planTier.monthlyLinks} links.`);
     }
 
     let shortSlug = customSlug;
