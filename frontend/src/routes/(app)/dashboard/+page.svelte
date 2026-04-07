@@ -18,6 +18,7 @@
 
   import { apiFetch } from '$lib/utils/api.js';
   import { onMount } from 'svelte';
+  import { toast } from '$lib/stores/toast.svelte.js';
 
   // State
   let stats = $state({
@@ -29,6 +30,7 @@
   });
   let links = $state<any[]>([]);
   let isLoading = $state(true);
+  let isFetchingLinks = $state(false);
   let error = $state<string | null>(null);
 
   // Metrics derived from stats
@@ -42,13 +44,20 @@
   let searchQuery = $state('');
   let statusFilter = $state('All Status');
 
-  async function fetchDashboardData() {
+  async function fetchDashboardData(isInitial = false) {
     try {
-      isLoading = true;
+      if (isInitial) isLoading = true;
+      else isFetchingLinks = true;
+
+      const params = new URLSearchParams();
+      if (searchQuery) params.append('search', searchQuery);
+      if (statusFilter !== 'All Status') params.append('status', statusFilter.toUpperCase());
+
       const [statsData, linksData] = await Promise.all([
-        apiFetch<any>('/dashboard'),
-        apiFetch<any[]>('/links')
+        isInitial ? apiFetch<any>('/dashboard') : Promise.resolve(stats),
+        apiFetch<any[]>(`/links?${params.toString()}`)
       ]);
+      
       stats = statsData;
       links = linksData;
     } catch (err: any) {
@@ -56,17 +65,33 @@
       console.error(err);
     } finally {
       isLoading = false;
+      isFetchingLinks = false;
     }
   }
 
   onMount(() => {
-    fetchDashboardData();
+    fetchDashboardData(true);
+  });
+
+  // Debounce search
+  let searchTimeout: any;
+  $effect(() => {
+    // Track searchQuery and statusFilter
+    const q = searchQuery;
+    const s = statusFilter;
+    
+    if (isLoading) return; // Don't run during initial load
+
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      fetchDashboardData();
+    }, 300);
   });
 
   function copyToClipboard(slug: string) {
     const fullUrl = `${window.location.origin}/${slug}`;
     navigator.clipboard.writeText(fullUrl);
-    // In a real app, show a toast
+    toast.success('Link copied to clipboard');
   }
 </script>
 
@@ -83,7 +108,7 @@
     </div>
     <a 
       href="/links/create"
-      class="inline-flex items-center gap-2 px-6 py-3.5 bg-blue-600 text-white font-bold rounded-2xl shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition-all active:scale-95 group"
+      class="inline-flex items-center gap-2 px-6 py-3.5 bg-blue-600 text-white font-bold rounded-2xl shadow-xl shadow-blue-600/30 hover:bg-blue-700 transition-all active:scale-95 group cursor-pointer"
     >
       <Plus size={20} strokeWidth={3} />
       <span>Create Sniip</span>
@@ -99,7 +124,7 @@
     <div class="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 p-8 rounded-3xl text-center space-y-4">
       <p class="text-red-600 dark:text-red-400 font-bold">{error}</p>
       <button 
-        onclick={fetchDashboardData}
+        onclick={() => fetchDashboardData(true)}
         class="px-6 py-2 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-all cursor-pointer"
       >
         Retry
@@ -136,6 +161,11 @@
             bind:value={searchQuery}
             class="w-full pl-12 pr-4 py-2.5 bg-slate-50 dark:bg-gray-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-blue-500 transition-all dark:text-white"
           />
+          {#if isFetchingLinks}
+            <div class="absolute right-4 top-1/2 -translate-y-1/2">
+              <Loader2 class="w-4 h-4 animate-spin text-blue-600" />
+            </div>
+          {/if}
         </div>
         
         <div class="flex flex-wrap items-center gap-3">
@@ -166,16 +196,22 @@
             <Link2 size={32} />
           </div>
           <div class="space-y-1">
-            <p class="text-lg font-black text-slate-900 dark:text-white">No links yet</p>
-            <p class="text-slate-500 dark:text-gray-400">Start by creating your first short link!</p>
+            <p class="text-lg font-black text-slate-900 dark:text-white">
+              {searchQuery || statusFilter !== 'All Status' ? 'No matches found' : 'No links yet'}
+            </p>
+            <p class="text-slate-500 dark:text-gray-400">
+              {searchQuery || statusFilter !== 'All Status' ? 'Try adjusting your filters.' : 'Start by creating your first short link!'}
+            </p>
           </div>
-          <a 
-            href="/links/create"
-            class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all"
-          >
-            <Plus size={18} strokeWidth={3} />
-            <span>Create First Sniip</span>
-          </a>
+          {#if !searchQuery && statusFilter === 'All Status'}
+            <a 
+              href="/links/create"
+              class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all cursor-pointer"
+            >
+              <Plus size={18} strokeWidth={3} />
+              <span>Create First Sniip</span>
+            </a>
+          {/if}
         </div>
       {:else}
         <div class="grid grid-cols-1 gap-4">
@@ -196,7 +232,7 @@
                     class="flex items-center gap-1.5 group/link cursor-pointer" 
                     onclick={() => copyToClipboard(link.shortSlug)}
                   >
-                    <span class="text-base font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">sniip.com/{link.shortSlug}</span>
+                    <span class="text-base font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-all">sniip.io/{link.shortSlug}</span>
                     <Copy class="w-3.5 h-3.5 text-slate-300 dark:text-gray-600 group-hover/link:text-blue-400 transition-colors" />
                   </button>
                   <span class="hidden sm:inline text-slate-200 dark:text-gray-800 font-thin">|</span>

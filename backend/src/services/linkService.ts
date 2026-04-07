@@ -125,7 +125,7 @@ export class LinkService {
             { title: { contains: search, mode: 'insensitive' } },
             { shortSlug: { contains: search, mode: 'insensitive' } },
             { originalUrl: { contains: search, mode: 'insensitive' } },
-            { tags: { has: search } },
+            { tags: { hasSome: [search] } },
           ],
         },
       ];

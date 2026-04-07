@@ -236,7 +236,7 @@
                   id="domain"
                   class="w-full px-4 py-4 rounded-xl border border-slate-200 dark:border-gray-700 bg-slate-50/30 dark:bg-gray-800/50 text-slate-900 dark:text-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none transition-all appearance-none cursor-pointer"
                 >
-                  <option value="sniip.com">sniip.com</option>
+                  <option value="sniip.io">sniip.io</option>
                   <option value="custom.site">custom.site</option>
                 </select>
                 <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">

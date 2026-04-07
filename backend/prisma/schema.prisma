@@ -29,8 +29,9 @@ model User {
   email     String   @unique
   role      Role     @default(USER)
   planId    String   @map("plan_id")
+  plan      String   @default("free")
   createdAt DateTime @default(now())
-  plan      Plan     @relation(fields: [planId], references: [id])
+  planTier  Plan     @relation(fields: [planId], references: [id])
   links     Link[]
 
   @@map("users")

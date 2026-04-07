@@ -7,6 +7,7 @@ import redirectionRoutes from './routes/redirection.js';
 import linksRoutes from './routes/links.js';
 import analyticsRoutes from './routes/analytics.js';
 import dashboardRoutes from './routes/dashboard.js';
+import qrCodeRoutes from './routes/qrcodes.js';
 
 const fastify = Fastify({
   logger: true,
@@ -45,6 +46,9 @@ fastify.register(async (apiInstance) => {
 
   // Register dashboard routes under /api/dashboard
   apiInstance.register(dashboardRoutes, { prefix: '/dashboard' });
+  
+  // Register QR code management routes under /api/qrcodes
+  apiInstance.register(qrCodeRoutes, { prefix: '/qrcodes' });
   
   // Note: Future epics like QR Codes or Settings would also go here
 }, { prefix: '/api' });

@@ -105,7 +105,7 @@
               </div>
            </div>
            <div class="absolute bottom-12 right-12 w-48 h-16 bg-blue-600 rounded-lg shadow-xl flex items-center justify-center text-white font-bold">
-              sniip.com/summer-sale
+              sniip.io/summer-sale
            </div>
         </div>
       </div>
