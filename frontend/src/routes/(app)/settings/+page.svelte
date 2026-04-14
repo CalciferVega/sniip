@@ -1,7 +1,8 @@
 <script lang="ts">
   import { darkMode } from '$lib/stores/darkMode.svelte';
-  import { Sun, Moon, Monitor, Check, ShieldCheck, Key } from 'lucide-svelte';
+  import { Sun, Moon, Monitor, Check, ShieldCheck, Key, Globe } from 'lucide-svelte';
   import PasswordModal from '$lib/components/ui/PasswordModal.svelte';
+  import DomainModal from '$lib/components/ui/DomainModal.svelte';
 
   const themes = [
     { 
@@ -25,6 +26,7 @@
   ] as const;
 
   let isPasswordModalOpen = $state(false);
+  let domainModal = $state<ReturnType<typeof DomainModal>>();
 </script>
 
 <svelte:head>
@@ -107,6 +109,33 @@
     </div>
   </section>
 
+  <!-- Workspace Section -->
+  <section class="space-y-6 pt-4">
+    <div class="flex items-center gap-2 border-b border-slate-100 dark:border-gray-800 pb-4">
+      <h2 class="text-xl font-bold text-slate-800 dark:text-gray-100">Workspace</h2>
+    </div>
+    
+    <div class="grid grid-cols-1 gap-4">
+        <div class="flex items-center justify-between p-6 bg-white dark:bg-gray-900 rounded-2xl border border-slate-100 dark:border-gray-800 group hover:border-blue-100 dark:hover:border-blue-900/30 transition-all">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                <Globe size={20} />
+              </div>
+              <div class="space-y-1">
+                  <p class="text-slate-900 dark:text-white font-bold">Custom Domains</p>
+                  <p class="text-xs text-slate-500 dark:text-gray-400">Configure branded domains for your short links via CNAME.</p>
+              </div>
+            </div>
+            <button 
+              onclick={() => domainModal?.showModal()}
+              class="px-4 py-2 bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-gray-400 text-xs font-black uppercase tracking-widest rounded-lg hover:bg-blue-600 hover:text-white transition-all cursor-pointer"
+            >
+                Manage
+            </button>
+        </div>
+    </div>
+  </section>
+
   <!-- Notification Preference Placeholder -->
   <section class="space-y-6 pt-4">
     <div class="flex items-center gap-2 border-b border-slate-100 dark:border-gray-800 pb-4">
@@ -153,4 +182,5 @@
 
   <!-- Modals -->
   <PasswordModal bind:open={isPasswordModalOpen} />
+  <DomainModal bind:this={domainModal} />
 </div>

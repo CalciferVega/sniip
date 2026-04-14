@@ -13,6 +13,7 @@ declare module 'fastify' {
       role: 'ADMIN' | 'USER';
       plan: string;
       planId: string;
+      organizationId: string | null;
       createdAt: Date;
     };
   }
@@ -84,6 +85,15 @@ const authMiddleware = async (fastify: FastifyInstance) => {
           role: 'USER',
           plan: 'free',
           planId: defaultPlan.id,
+        },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          plan: true,
+          planId: true,
+          organizationId: true,
+          createdAt: true,
         }
       });
       fastify.log.info({ dbUserId: dbUser.id }, 'User upsert successful');
@@ -96,6 +106,7 @@ const authMiddleware = async (fastify: FastifyInstance) => {
         role: dbUser.role as 'ADMIN' | 'USER',
         plan: dbUser.plan,
         planId: dbUser.planId,
+        organizationId: dbUser.organizationId,
         createdAt: dbUser.createdAt,
       };
       fastify.log.info('Request user object attached, moving to handler');

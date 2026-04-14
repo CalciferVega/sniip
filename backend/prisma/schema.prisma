@@ -25,27 +25,58 @@ enum Status {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  role      Role     @default(USER)
-  planId    String   @map("plan_id")
-  plan      String   @default("free")
-  createdAt DateTime @default(now())
-  planTier  Plan     @relation(fields: [planId], references: [id])
-  links     Link[]
+  id             String   @id @default(uuid())
+  email          String   @unique
+  role           Role     @default(USER)
+  planId         String   @map("plan_id")
+  plan           String   @default("free")
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now())
+  
+  planTier           Plan           @relation(fields: [planId], references: [id])
+  organization       Organization?  @relation("OrganizationMembers", fields: [organizationId], references: [id])
+  ownedOrganizations Organization[] @relation("OwnedOrganizations")
+  links              Link[]
 
   @@map("users")
 }
 
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  status    Status   @default(ACTIVE)
+  ownerId   String   @map("owner_id")
+  createdAt DateTime @default(now())
+
+  owner   User     @relation("OwnedOrganizations", fields: [ownerId], references: [id])
+  users   User[]   @relation("OrganizationMembers")
+  domains Domain[]
+
+  @@map("organizations")
+}
+
+model Domain {
+  id             String   @id @default(uuid())
+  hostname       String   @unique
+  organizationId String   @map("organization_id")
+  verified       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("domains")
+}
+
 model Plan {
-  id              String   @id @default(uuid())
-  tierName        String   @unique @map("tier_name")
-  publicName      String   @map("public_name")
-  monthlyLinks    Int      @map("monthly_links")
-  monthlyQrCodes  Int      @map("monthly_qrcodes")
-  price           Float    @default(0)
-  createdAt       DateTime @default(now())
-  users           User[]
+  id               String   @id @default(uuid())
+  tierName         String   @unique @map("tier_name")
+  publicName       String   @map("public_name")
+  monthlyLinks     Int      @map("monthly_links")
+  monthlyQrCodes   Int      @map("monthly_qrcodes")
+  maxOrganizations Int      @default(0) @map("max_organizations")
+  price            Float    @default(0)
+  createdAt        DateTime @default(now())
+  users            User[]
 
   @@map("plans")
 }
@@ -54,6 +85,7 @@ model Link {
   id              String            @id @default(uuid())
   userId          String            @map("user_id")
   originalUrl     String            @map("original_url")
+  domain          String            @default("sniip.io")
   shortSlug       String            @unique @map("short_slug")
   title           String?
   tags            String[]

@@ -28,6 +28,7 @@ export type LinkMinAggregateOutputType = {
   id: string | null
   userId: string | null
   originalUrl: string | null
+  domain: string | null
   shortSlug: string | null
   title: string | null
   status: $Enums.Status | null
@@ -38,6 +39,7 @@ export type LinkMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   originalUrl: string | null
+  domain: string | null
   shortSlug: string | null
   title: string | null
   status: $Enums.Status | null
@@ -48,6 +50,7 @@ export type LinkCountAggregateOutputType = {
   id: number
   userId: number
   originalUrl: number
+  domain: number
   shortSlug: number
   title: number
   tags: number
@@ -61,6 +64,7 @@ export type LinkMinAggregateInputType = {
   id?: true
   userId?: true
   originalUrl?: true
+  domain?: true
   shortSlug?: true
   title?: true
   status?: true
@@ -71,6 +75,7 @@ export type LinkMaxAggregateInputType = {
   id?: true
   userId?: true
   originalUrl?: true
+  domain?: true
   shortSlug?: true
   title?: true
   status?: true
@@ -81,6 +86,7 @@ export type LinkCountAggregateInputType = {
   id?: true
   userId?: true
   originalUrl?: true
+  domain?: true
   shortSlug?: true
   title?: true
   tags?: true
@@ -165,6 +171,7 @@ export type LinkGroupByOutputType = {
   id: string
   userId: string
   originalUrl: string
+  domain: string
   shortSlug: string
   title: string | null
   tags: string[]
@@ -197,6 +204,7 @@ export type LinkWhereInput = {
   id?: Prisma.StringFilter<"Link"> | string
   userId?: Prisma.StringFilter<"Link"> | string
   originalUrl?: Prisma.StringFilter<"Link"> | string
+  domain?: Prisma.StringFilter<"Link"> | string
   shortSlug?: Prisma.StringFilter<"Link"> | string
   title?: Prisma.StringNullableFilter<"Link"> | string | null
   tags?: Prisma.StringNullableListFilter<"Link">
@@ -211,6 +219,7 @@ export type LinkOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   originalUrl?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   shortSlug?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -229,6 +238,7 @@ export type LinkWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LinkWhereInput | Prisma.LinkWhereInput[]
   userId?: Prisma.StringFilter<"Link"> | string
   originalUrl?: Prisma.StringFilter<"Link"> | string
+  domain?: Prisma.StringFilter<"Link"> | string
   title?: Prisma.StringNullableFilter<"Link"> | string | null
   tags?: Prisma.StringNullableListFilter<"Link">
   status?: Prisma.EnumStatusFilter<"Link"> | $Enums.Status
@@ -242,6 +252,7 @@ export type LinkOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   originalUrl?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   shortSlug?: Prisma.SortOrder
   title?: Prisma.SortOrderInput | Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -259,6 +270,7 @@ export type LinkScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Link"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Link"> | string
   originalUrl?: Prisma.StringWithAggregatesFilter<"Link"> | string
+  domain?: Prisma.StringWithAggregatesFilter<"Link"> | string
   shortSlug?: Prisma.StringWithAggregatesFilter<"Link"> | string
   title?: Prisma.StringNullableWithAggregatesFilter<"Link"> | string | null
   tags?: Prisma.StringNullableListFilter<"Link">
@@ -269,6 +281,7 @@ export type LinkScalarWhereWithAggregatesInput = {
 export type LinkCreateInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -283,6 +296,7 @@ export type LinkUncheckedCreateInput = {
   id?: string
   userId: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -295,6 +309,7 @@ export type LinkUncheckedCreateInput = {
 export type LinkUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -309,6 +324,7 @@ export type LinkUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -322,6 +338,7 @@ export type LinkCreateManyInput = {
   id?: string
   userId: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -332,6 +349,7 @@ export type LinkCreateManyInput = {
 export type LinkUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -343,6 +361,7 @@ export type LinkUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -372,6 +391,7 @@ export type LinkCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   originalUrl?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   shortSlug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -383,6 +403,7 @@ export type LinkMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   originalUrl?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   shortSlug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -393,6 +414,7 @@ export type LinkMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   originalUrl?: Prisma.SortOrder
+  domain?: Prisma.SortOrder
   shortSlug?: Prisma.SortOrder
   title?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -450,17 +472,9 @@ export type LinkCreatetagsInput = {
   set: string[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type LinkUpdatetagsInput = {
   set?: string[]
   push?: string | string[]
-}
-
-export type EnumStatusFieldUpdateOperationsInput = {
-  set?: $Enums.Status
 }
 
 export type LinkCreateNestedOneWithoutQrCodesInput = {
@@ -494,6 +508,7 @@ export type LinkUpdateOneRequiredWithoutClicksAnalyticsNestedInput = {
 export type LinkCreateWithoutUserInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -506,6 +521,7 @@ export type LinkCreateWithoutUserInput = {
 export type LinkUncheckedCreateWithoutUserInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -548,6 +564,7 @@ export type LinkScalarWhereInput = {
   id?: Prisma.StringFilter<"Link"> | string
   userId?: Prisma.StringFilter<"Link"> | string
   originalUrl?: Prisma.StringFilter<"Link"> | string
+  domain?: Prisma.StringFilter<"Link"> | string
   shortSlug?: Prisma.StringFilter<"Link"> | string
   title?: Prisma.StringNullableFilter<"Link"> | string | null
   tags?: Prisma.StringNullableListFilter<"Link">
@@ -558,6 +575,7 @@ export type LinkScalarWhereInput = {
 export type LinkCreateWithoutQrCodesInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -571,6 +589,7 @@ export type LinkUncheckedCreateWithoutQrCodesInput = {
   id?: string
   userId: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -598,6 +617,7 @@ export type LinkUpdateToOneWithWhereWithoutQrCodesInput = {
 export type LinkUpdateWithoutQrCodesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -611,6 +631,7 @@ export type LinkUncheckedUpdateWithoutQrCodesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -622,6 +643,7 @@ export type LinkUncheckedUpdateWithoutQrCodesInput = {
 export type LinkCreateWithoutClicksAnalyticsInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -635,6 +657,7 @@ export type LinkUncheckedCreateWithoutClicksAnalyticsInput = {
   id?: string
   userId: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -662,6 +685,7 @@ export type LinkUpdateToOneWithWhereWithoutClicksAnalyticsInput = {
 export type LinkUpdateWithoutClicksAnalyticsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -675,6 +699,7 @@ export type LinkUncheckedUpdateWithoutClicksAnalyticsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -686,6 +711,7 @@ export type LinkUncheckedUpdateWithoutClicksAnalyticsInput = {
 export type LinkCreateManyUserInput = {
   id?: string
   originalUrl: string
+  domain?: string
   shortSlug: string
   title?: string | null
   tags?: Prisma.LinkCreatetagsInput | string[]
@@ -696,6 +722,7 @@ export type LinkCreateManyUserInput = {
 export type LinkUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -708,6 +735,7 @@ export type LinkUpdateWithoutUserInput = {
 export type LinkUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -720,6 +748,7 @@ export type LinkUncheckedUpdateWithoutUserInput = {
 export type LinkUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   originalUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
   shortSlug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.LinkUpdatetagsInput | string[]
@@ -771,6 +800,7 @@ export type LinkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   userId?: boolean
   originalUrl?: boolean
+  domain?: boolean
   shortSlug?: boolean
   title?: boolean
   tags?: boolean
@@ -786,6 +816,7 @@ export type LinkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   userId?: boolean
   originalUrl?: boolean
+  domain?: boolean
   shortSlug?: boolean
   title?: boolean
   tags?: boolean
@@ -798,6 +829,7 @@ export type LinkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   userId?: boolean
   originalUrl?: boolean
+  domain?: boolean
   shortSlug?: boolean
   title?: boolean
   tags?: boolean
@@ -810,6 +842,7 @@ export type LinkSelectScalar = {
   id?: boolean
   userId?: boolean
   originalUrl?: boolean
+  domain?: boolean
   shortSlug?: boolean
   title?: boolean
   tags?: boolean
@@ -817,7 +850,7 @@ export type LinkSelectScalar = {
   createdAt?: boolean
 }
 
-export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "originalUrl" | "shortSlug" | "title" | "tags" | "status" | "createdAt", ExtArgs["result"]["link"]>
+export type LinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "originalUrl" | "domain" | "shortSlug" | "title" | "tags" | "status" | "createdAt", ExtArgs["result"]["link"]>
 export type LinkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   qrCodes?: boolean | Prisma.Link$qrCodesArgs<ExtArgs>
@@ -842,6 +875,7 @@ export type $LinkPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     userId: string
     originalUrl: string
+    domain: string
     shortSlug: string
     title: string | null
     tags: string[]
@@ -1276,6 +1310,7 @@ export interface LinkFieldRefs {
   readonly id: Prisma.FieldRef<"Link", 'String'>
   readonly userId: Prisma.FieldRef<"Link", 'String'>
   readonly originalUrl: Prisma.FieldRef<"Link", 'String'>
+  readonly domain: Prisma.FieldRef<"Link", 'String'>
   readonly shortSlug: Prisma.FieldRef<"Link", 'String'>
   readonly title: Prisma.FieldRef<"Link", 'String'>
   readonly tags: Prisma.FieldRef<"Link", 'String[]'>

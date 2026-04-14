@@ -2,6 +2,8 @@
   import { fade, fly } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
   import { authStore, logout } from '$lib/stores/auth.js';
+  import { usageStore } from '$lib/stores/usage.svelte.js';
+  import UsageLimit from './UsageLimit.svelte';
   import { page } from '$app/state';
   import { House, Link, QrCode, BarChart3, Settings, LogOut } from 'lucide-svelte';
 
@@ -24,6 +26,13 @@
     if (href === '/dashboard') return page.url.pathname === '/dashboard';
     return page.url.pathname.startsWith(href);
   }
+
+  // Fetch usage when menu opens if not already loaded
+  $effect(() => {
+    if (isOpen && $authStore.user && !usageStore.usage && !usageStore.loading) {
+      usageStore.fetchUsage();
+    }
+  });
 </script>
 
 {#if isOpen}
@@ -41,8 +50,29 @@
     class="fixed bottom-0 left-0 right-0 z-[70] p-6 pb-24 md:p-8"
     transition:fly={{ y: 200, duration: 600, easing: quintOut }}
   >
-    <div class="max-w-md mx-auto bg-white/70 dark:bg-gray-900/70 backdrop-blur-3xl rounded-[3rem] border border-white/30 dark:border-white/10 shadow-2xl overflow-hidden p-6 space-y-4">
+    <div class="max-w-md mx-auto bg-white/70 dark:bg-gray-900/70 backdrop-blur-3xl rounded-[3rem] border border-white/30 dark:border-white/10 shadow-2xl overflow-hidden p-6 space-y-6">
       
+      {#if $authStore.user}
+        <div class="px-2">
+          {#if usageStore.usage}
+            <UsageLimit 
+              used={usageStore.usage.used} 
+              total={usageStore.usage.total} 
+              plan={usageStore.usage.plan} 
+              resetDate={usageStore.usage.resetDate}
+            />
+          {:else if usageStore.loading}
+             <div class="animate-pulse space-y-3 px-1">
+              <div class="h-2 w-12 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
+              <div class="space-y-2">
+                <div class="flex justify-between h-3 w-full bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+                <div class="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+              </div>
+            </div>
+          {/if}
+        </div>
+      {/if}
+
       <!-- Navigation Grid -->
       <div class="grid grid-cols-3 gap-4">
         {#each navItems as item}

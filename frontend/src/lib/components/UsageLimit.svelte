@@ -3,7 +3,7 @@
   interface Props {
     used: number;
     total: number;
-    plan: 'free' | 'pro';
+    plan: 'free' | 'pro' | 'teams';
     resetDate?: string;
   }
 

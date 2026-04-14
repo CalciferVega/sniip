@@ -1,6 +1,14 @@
 <script lang="ts">
   import { X, AlertCircle, Loader2 } from 'lucide-svelte';
   import DragDropUploader from '$lib/components/ui/DragDropUploader.svelte';
+  import { usageStore } from '$lib/stores/usage.svelte';
+  import UpgradeModal from '$lib/components/ui/UpgradeModal.svelte';
+
+  interface Props {
+    upgradeModal?: ReturnType<typeof UpgradeModal>;
+  }
+
+  let { upgradeModal }: Props = $props();
 
   // Svelte 5 state management
   let dialogElement = $state<HTMLDialogElement | null>(null);
@@ -19,6 +27,14 @@
 
   function handleUpload() {
     if (!selectedFile) return;
+
+    // Check Usage Limits before bulk upload
+    if (usageStore.usage && usageStore.usage.used >= usageStore.usage.total) {
+      closeModal();
+      upgradeModal?.showModal();
+      return;
+    }
+
     // In a real implementation, we would process the CSV here
     console.log('Uploading file:', selectedFile.name);
     // For now, just close after a tiny delay to simulate progress

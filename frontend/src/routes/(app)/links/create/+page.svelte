@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Upload, ChevronUp, Sparkles, Loader2, AlertCircle, CheckCircle2, Plus } from 'lucide-svelte';
   import { apiFetch } from '$lib/utils/api';
+  import { usageStore } from '$lib/stores/usage.svelte';
   import { goto } from '$app/navigation';
   import BulkUploadModal from './BulkUploadModal.svelte';
   import UTMModal from './UTMModal.svelte';
+  import UpgradeModal from '$lib/components/ui/UpgradeModal.svelte';
   import ConfirmModal from '$lib/components/ui/ConfirmModal.svelte';
   import TagInput from '$lib/components/ui/TagInput.svelte';
 
@@ -17,6 +19,7 @@
   let success = $state(false);
   let bulkUploadModal = $state<ReturnType<typeof BulkUploadModal>>();
   let utmModal = $state<ReturnType<typeof UTMModal>>();
+  let upgradeModal = $state<ReturnType<typeof UpgradeModal>>();
   let confirmModal = $state<ReturnType<typeof ConfirmModal>>();
   let pendingUtms = $state<any>(null);
 
@@ -41,6 +44,12 @@
       return;
     }
 
+    // 1. Check Usage Limits
+    if (usageStore.usage && usageStore.usage.used >= usageStore.usage.total) {
+      upgradeModal?.showModal();
+      return;
+    }
+
     isSubmitting = true;
     error = null;
     success = false;
@@ -56,12 +65,20 @@
         })
       });
 
+      // Refresh usage after successful creation
+      usageStore.refresh();
+
       success = true;
       setTimeout(() => {
         goto('/dashboard');
       }, 1200);
     } catch (err: any) {
       error = err.message || 'Something went wrong. Please try again.';
+      
+      // If the backend also returns a limit error, show the modal as well
+      if (err.message?.toLowerCase().includes('limit reached')) {
+        upgradeModal?.showModal();
+      }
     } finally {
       isSubmitting = false;
     }
@@ -145,7 +162,7 @@
       </button>
     </header>
 
-    <BulkUploadModal bind:this={bulkUploadModal} />
+    <BulkUploadModal bind:this={bulkUploadModal} upgradeModal={upgradeModal} />
     <UTMModal bind:this={utmModal} onAdd={handleUTMAdd} />
     <ConfirmModal 
         bind:this={confirmModal}
@@ -301,4 +318,6 @@
       </div>
     </section>
   </div>
+  
+  <UpgradeModal bind:this={upgradeModal} />
 </div>

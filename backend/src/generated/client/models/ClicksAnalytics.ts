@@ -425,10 +425,6 @@ export type ClicksAnalyticsUncheckedUpdateManyWithoutLinkNestedInput = {
   deleteMany?: Prisma.ClicksAnalyticsScalarWhereInput | Prisma.ClicksAnalyticsScalarWhereInput[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ClicksAnalyticsCreateWithoutLinkInput = {
   id?: string
   clickedAt?: Date | string

@@ -29,12 +29,14 @@ export type AggregatePlan = {
 export type PlanAvgAggregateOutputType = {
   monthlyLinks: number | null
   monthlyQrCodes: number | null
+  maxOrganizations: number | null
   price: number | null
 }
 
 export type PlanSumAggregateOutputType = {
   monthlyLinks: number | null
   monthlyQrCodes: number | null
+  maxOrganizations: number | null
   price: number | null
 }
 
@@ -44,6 +46,7 @@ export type PlanMinAggregateOutputType = {
   publicName: string | null
   monthlyLinks: number | null
   monthlyQrCodes: number | null
+  maxOrganizations: number | null
   price: number | null
   createdAt: Date | null
 }
@@ -54,6 +57,7 @@ export type PlanMaxAggregateOutputType = {
   publicName: string | null
   monthlyLinks: number | null
   monthlyQrCodes: number | null
+  maxOrganizations: number | null
   price: number | null
   createdAt: Date | null
 }
@@ -64,6 +68,7 @@ export type PlanCountAggregateOutputType = {
   publicName: number
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations: number
   price: number
   createdAt: number
   _all: number
@@ -73,12 +78,14 @@ export type PlanCountAggregateOutputType = {
 export type PlanAvgAggregateInputType = {
   monthlyLinks?: true
   monthlyQrCodes?: true
+  maxOrganizations?: true
   price?: true
 }
 
 export type PlanSumAggregateInputType = {
   monthlyLinks?: true
   monthlyQrCodes?: true
+  maxOrganizations?: true
   price?: true
 }
 
@@ -88,6 +95,7 @@ export type PlanMinAggregateInputType = {
   publicName?: true
   monthlyLinks?: true
   monthlyQrCodes?: true
+  maxOrganizations?: true
   price?: true
   createdAt?: true
 }
@@ -98,6 +106,7 @@ export type PlanMaxAggregateInputType = {
   publicName?: true
   monthlyLinks?: true
   monthlyQrCodes?: true
+  maxOrganizations?: true
   price?: true
   createdAt?: true
 }
@@ -108,6 +117,7 @@ export type PlanCountAggregateInputType = {
   publicName?: true
   monthlyLinks?: true
   monthlyQrCodes?: true
+  maxOrganizations?: true
   price?: true
   createdAt?: true
   _all?: true
@@ -205,6 +215,7 @@ export type PlanGroupByOutputType = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations: number
   price: number
   createdAt: Date
   _count: PlanCountAggregateOutputType | null
@@ -238,6 +249,7 @@ export type PlanWhereInput = {
   publicName?: Prisma.StringFilter<"Plan"> | string
   monthlyLinks?: Prisma.IntFilter<"Plan"> | number
   monthlyQrCodes?: Prisma.IntFilter<"Plan"> | number
+  maxOrganizations?: Prisma.IntFilter<"Plan"> | number
   price?: Prisma.FloatFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -249,6 +261,7 @@ export type PlanOrderByWithRelationInput = {
   publicName?: Prisma.SortOrder
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -263,6 +276,7 @@ export type PlanWhereUniqueInput = Prisma.AtLeast<{
   publicName?: Prisma.StringFilter<"Plan"> | string
   monthlyLinks?: Prisma.IntFilter<"Plan"> | number
   monthlyQrCodes?: Prisma.IntFilter<"Plan"> | number
+  maxOrganizations?: Prisma.IntFilter<"Plan"> | number
   price?: Prisma.FloatFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -274,6 +288,7 @@ export type PlanOrderByWithAggregationInput = {
   publicName?: Prisma.SortOrder
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.PlanCountOrderByAggregateInput
@@ -292,6 +307,7 @@ export type PlanScalarWhereWithAggregatesInput = {
   publicName?: Prisma.StringWithAggregatesFilter<"Plan"> | string
   monthlyLinks?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   monthlyQrCodes?: Prisma.IntWithAggregatesFilter<"Plan"> | number
+  maxOrganizations?: Prisma.IntWithAggregatesFilter<"Plan"> | number
   price?: Prisma.FloatWithAggregatesFilter<"Plan"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
 }
@@ -302,6 +318,7 @@ export type PlanCreateInput = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations?: number
   price?: number
   createdAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutPlanTierInput
@@ -313,6 +330,7 @@ export type PlanUncheckedCreateInput = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations?: number
   price?: number
   createdAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutPlanTierInput
@@ -324,6 +342,7 @@ export type PlanUpdateInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutPlanTierNestedInput
@@ -335,6 +354,7 @@ export type PlanUncheckedUpdateInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutPlanTierNestedInput
@@ -346,6 +366,7 @@ export type PlanCreateManyInput = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations?: number
   price?: number
   createdAt?: Date | string
 }
@@ -356,6 +377,7 @@ export type PlanUpdateManyMutationInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -366,6 +388,7 @@ export type PlanUncheckedUpdateManyInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -381,6 +404,7 @@ export type PlanCountOrderByAggregateInput = {
   publicName?: Prisma.SortOrder
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -388,6 +412,7 @@ export type PlanCountOrderByAggregateInput = {
 export type PlanAvgOrderByAggregateInput = {
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
 
@@ -397,6 +422,7 @@ export type PlanMaxOrderByAggregateInput = {
   publicName?: Prisma.SortOrder
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -407,6 +433,7 @@ export type PlanMinOrderByAggregateInput = {
   publicName?: Prisma.SortOrder
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
@@ -414,6 +441,7 @@ export type PlanMinOrderByAggregateInput = {
 export type PlanSumOrderByAggregateInput = {
   monthlyLinks?: Prisma.SortOrder
   monthlyQrCodes?: Prisma.SortOrder
+  maxOrganizations?: Prisma.SortOrder
   price?: Prisma.SortOrder
 }
 
@@ -453,6 +481,7 @@ export type PlanCreateWithoutUsersInput = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations?: number
   price?: number
   createdAt?: Date | string
 }
@@ -463,6 +492,7 @@ export type PlanUncheckedCreateWithoutUsersInput = {
   publicName: string
   monthlyLinks: number
   monthlyQrCodes: number
+  maxOrganizations?: number
   price?: number
   createdAt?: Date | string
 }
@@ -489,6 +519,7 @@ export type PlanUpdateWithoutUsersInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -499,6 +530,7 @@ export type PlanUncheckedUpdateWithoutUsersInput = {
   publicName?: Prisma.StringFieldUpdateOperationsInput | string
   monthlyLinks?: Prisma.IntFieldUpdateOperationsInput | number
   monthlyQrCodes?: Prisma.IntFieldUpdateOperationsInput | number
+  maxOrganizations?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -540,6 +572,7 @@ export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   publicName?: boolean
   monthlyLinks?: boolean
   monthlyQrCodes?: boolean
+  maxOrganizations?: boolean
   price?: boolean
   createdAt?: boolean
   users?: boolean | Prisma.Plan$usersArgs<ExtArgs>
@@ -552,6 +585,7 @@ export type PlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   publicName?: boolean
   monthlyLinks?: boolean
   monthlyQrCodes?: boolean
+  maxOrganizations?: boolean
   price?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["plan"]>
@@ -562,6 +596,7 @@ export type PlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   publicName?: boolean
   monthlyLinks?: boolean
   monthlyQrCodes?: boolean
+  maxOrganizations?: boolean
   price?: boolean
   createdAt?: boolean
 }, ExtArgs["result"]["plan"]>
@@ -572,11 +607,12 @@ export type PlanSelectScalar = {
   publicName?: boolean
   monthlyLinks?: boolean
   monthlyQrCodes?: boolean
+  maxOrganizations?: boolean
   price?: boolean
   createdAt?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tierName" | "publicName" | "monthlyLinks" | "monthlyQrCodes" | "price" | "createdAt", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tierName" | "publicName" | "monthlyLinks" | "monthlyQrCodes" | "maxOrganizations" | "price" | "createdAt", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Plan$usersArgs<ExtArgs>
   _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -595,6 +631,7 @@ export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     publicName: string
     monthlyLinks: number
     monthlyQrCodes: number
+    maxOrganizations: number
     price: number
     createdAt: Date
   }, ExtArgs["result"]["plan"]>
@@ -1026,6 +1063,7 @@ export interface PlanFieldRefs {
   readonly publicName: Prisma.FieldRef<"Plan", 'String'>
   readonly monthlyLinks: Prisma.FieldRef<"Plan", 'Int'>
   readonly monthlyQrCodes: Prisma.FieldRef<"Plan", 'Int'>
+  readonly maxOrganizations: Prisma.FieldRef<"Plan", 'Int'>
   readonly price: Prisma.FieldRef<"Plan", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
 }

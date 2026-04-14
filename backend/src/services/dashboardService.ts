@@ -41,6 +41,48 @@ export class DashboardService {
       totalLinks,
     };
   }
+
+  /**
+   * Retrieves usage limits and current consumption for a specific user.
+   */
+  async getUserUsage(userEmail: string) {
+    const user = await prisma.user.findUnique({
+      where: { email: userEmail },
+      include: {
+        planTier: true,
+        _count: {
+          select: { links: true },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Calculate reset date (e.g., 30 days after creation or next month)
+    // For now, let's say it resets at the same day next month
+    const createdAt = new Date(user.createdAt);
+    const now = new Date();
+    let resetDate = new Date(now.getFullYear(), now.getMonth(), createdAt.getDate());
+    
+    if (resetDate <= now) {
+      resetDate.setMonth(resetDate.getMonth() + 1);
+    }
+
+    const formattedResetDate = resetDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+
+    return {
+      used: user._count.links,
+      total: user.planTier?.monthlyLinks || 0,
+      plan: user.planTier?.tierName.toLowerCase() || 'free',
+      resetDate: formattedResetDate,
+    };
+  }
 }
 
 export const dashboardService = new DashboardService();

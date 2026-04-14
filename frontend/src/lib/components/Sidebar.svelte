@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { authStore, logout } from '$lib/stores/auth.js';
+  import { usageStore } from '$lib/stores/usage.svelte.js';
   import UsageLimit from './UsageLimit.svelte';
   import { House, Link, QrCode, BarChart3, Settings, LogOut } from 'lucide-svelte';
 
@@ -18,6 +19,13 @@
     }
     return page.url.pathname.startsWith(href);
   }
+
+  // Fetch usage when user state changes
+  $effect(() => {
+    if ($authStore.user && !usageStore.usage && !usageStore.loading) {
+      usageStore.fetchUsage();
+    }
+  });
 </script>
 
 <aside class="hidden lg:flex flex-col w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 h-screen fixed left-0 top-0 transition-colors duration-300">
@@ -46,7 +54,22 @@
 
   <div class="p-4 border-t border-gray-200 dark:border-gray-800">
     {#if $authStore.user}
-      <UsageLimit used={2} total={25} plan="free" />
+      {#if usageStore.usage}
+        <UsageLimit 
+          used={usageStore.usage.used} 
+          total={usageStore.usage.total} 
+          plan={usageStore.usage.plan} 
+          resetDate={usageStore.usage.resetDate}
+        />
+      {:else if usageStore.loading}
+        <div class="animate-pulse space-y-3 px-1">
+          <div class="h-2 w-12 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
+          <div class="space-y-2">
+            <div class="flex justify-between h-3 w-full bg-gray-100 dark:bg-gray-800 rounded-lg"></div>
+            <div class="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+          </div>
+        </div>
+      {/if}
       <div class="flex items-center mt-6 mb-4">
         <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-700 dark:text-blue-400 font-bold mr-3">
           {$authStore.user.email?.[0].toUpperCase() || 'U'}

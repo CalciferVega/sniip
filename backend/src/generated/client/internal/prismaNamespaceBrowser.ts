@@ -52,6 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Organization: 'Organization',
+  Domain: 'Domain',
   Plan: 'Plan',
   Link: 'Link',
   QrCode: 'QrCode',
@@ -80,10 +82,33 @@ export const UserScalarFieldEnum = {
   role: 'role',
   planId: 'planId',
   plan: 'plan',
+  organizationId: 'organizationId',
   createdAt: 'createdAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  status: 'status',
+  ownerId: 'ownerId',
+  createdAt: 'createdAt'
+} as const
+
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const DomainScalarFieldEnum = {
+  id: 'id',
+  hostname: 'hostname',
+  organizationId: 'organizationId',
+  verified: 'verified',
+  createdAt: 'createdAt'
+} as const
+
+export type DomainScalarFieldEnum = (typeof DomainScalarFieldEnum)[keyof typeof DomainScalarFieldEnum]
 
 
 export const PlanScalarFieldEnum = {
@@ -92,6 +117,7 @@ export const PlanScalarFieldEnum = {
   publicName: 'publicName',
   monthlyLinks: 'monthlyLinks',
   monthlyQrCodes: 'monthlyQrCodes',
+  maxOrganizations: 'maxOrganizations',
   price: 'price',
   createdAt: 'createdAt'
 } as const
@@ -103,6 +129,7 @@ export const LinkScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   originalUrl: 'originalUrl',
+  domain: 'domain',
   shortSlug: 'shortSlug',
   title: 'title',
   tags: 'tags',
