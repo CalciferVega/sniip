@@ -29,8 +29,8 @@
     "dotenv": "^16.4.5",
     "fastify": "^4.26.2",
     "fastify-plugin": "^5.1.0",
-    "firebase-admin": "^13.7.0",
     "geoip-lite": "^2.0.1",
+    "jose": "^6.2.2",
     "pg": "^8.20.0",
     "qrcode": "^1.5.4",
     "zod": "^3.22.4"

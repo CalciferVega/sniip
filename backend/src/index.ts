@@ -36,7 +36,7 @@ fastify.register(redirectionRoutes);
 // 2. Register protected API routes
 // We use a scoped registration to apply authMiddleware only to /api/* routes
 fastify.register(async (apiInstance) => {
-  // Apply Firebase Auth validation to all routes in this scope
+  // Apply Supabase Auth validation to all routes in this scope
   apiInstance.register(authMiddleware);
   
   // Register link management routes under /api/links

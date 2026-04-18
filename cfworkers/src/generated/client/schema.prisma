@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Status {
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+model User {
+  id             String   @id @default(uuid())
+  email          String   @unique
+  role           Role     @default(USER)
+  planId         String   @map("plan_id")
+  plan           String   @default("free")
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now())
+
+  planTier           Plan           @relation(fields: [planId], references: [id])
+  organization       Organization?  @relation("OrganizationMembers", fields: [organizationId], references: [id])
+  ownedOrganizations Organization[] @relation("OwnedOrganizations")
+  links              Link[]
+
+  @@map("users")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  status    Status   @default(ACTIVE)
+  ownerId   String   @map("owner_id")
+  createdAt DateTime @default(now())
+
+  owner   User     @relation("OwnedOrganizations", fields: [ownerId], references: [id])
+  users   User[]   @relation("OrganizationMembers")
+  domains Domain[]
+
+  @@map("organizations")
+}
+
+model Domain {
+  id             String   @id @default(uuid())
+  hostname       String   @unique
+  organizationId String   @map("organization_id")
+  verified       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@map("domains")
+}
+
+model Plan {
+  id               String   @id @default(uuid())
+  tierName         String   @unique @map("tier_name")
+  publicName       String   @map("public_name")
+  monthlyLinks     Int      @map("monthly_links")
+  monthlyQrCodes   Int      @map("monthly_qrcodes")
+  maxOrganizations Int      @default(0) @map("max_organizations")
+  price            Float    @default(0)
+  createdAt        DateTime @default(now())
+  users            User[]
+
+  @@map("plans")
+}
+
+model Link {
+  id              String            @id @default(uuid())
+  userId          String            @map("user_id")
+  originalUrl     String            @map("original_url")
+  domain          String            @default("sniip.io")
+  shortSlug       String            @unique @map("short_slug")
+  title           String?
+  tags            String[]
+  status          Status            @default(ACTIVE)
+  createdAt       DateTime          @default(now())
+  user            User              @relation(fields: [userId], references: [id])
+  qrCodes         QrCode[]
+  clicksAnalytics ClicksAnalytics[]
+
+  @@index([shortSlug])
+  @@map("links")
+}
+
+model QrCode {
+  id           String @id @default(uuid())
+  linkId       String @map("link_id")
+  designConfig Json   @map("design_config")
+  imageUrl     String @map("image_url")
+  link         Link   @relation(fields: [linkId], references: [id])
+
+  @@map("qr_codes")
+}
+
+model ClicksAnalytics {
+  id        String   @id @default(uuid())
+  linkId    String   @map("link_id")
+  clickedAt DateTime @default(now()) @map("clicked_at")
+  ip        String?
+  isQr      Boolean  @default(false) @map("is_qr")
+  country   String?
+  device    String?
+  referrer  String?
+  link      Link     @relation(fields: [linkId], references: [id])
+
+  @@map("clicks_analytics")
+}

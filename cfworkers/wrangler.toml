@@ -1,0 +1,8 @@
+name = "sniip-api"
+main = "src/index.ts"
+compatibility_date = "2026-04-13"
+compatibility_flags = [ "nodejs_compat" ]
+
+[vars]
+SUPABASE_URL = "https://thiwdgtsywfzholhhsvk.supabase.co"
+# DATABASE_URL = "" (Set this in Cloudflare Dashboard for security)
