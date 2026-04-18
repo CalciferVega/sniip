@@ -22,7 +22,7 @@
 
   // Fetch usage when user state changes
   $effect(() => {
-    if ($authStore.user && !usageStore.usage && !usageStore.loading) {
+    if ($authStore.user && !usageStore.usage && !usageStore.loading && !usageStore.error) {
       usageStore.fetchUsage();
     }
   });

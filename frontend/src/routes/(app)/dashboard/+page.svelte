@@ -54,7 +54,7 @@
       if (statusFilter !== 'All Status') params.append('status', statusFilter.toUpperCase());
 
       const [statsData, linksData] = await Promise.all([
-        isInitial ? apiFetch<any>('/dashboard') : Promise.resolve(stats),
+        isInitial ? apiFetch<any>('/dashboard/stats') : Promise.resolve(stats),
         apiFetch<any[]>(`/links?${params.toString()}`)
       ]);
       

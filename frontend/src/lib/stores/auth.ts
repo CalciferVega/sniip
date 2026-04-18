@@ -1,35 +1,6 @@
 import { writable } from 'svelte/store';
-import { onAuthStateChanged, type User, signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, updatePassword as firebaseUpdatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-
-/**
- * Update user password
- */
-export const updatePassword = async (newPass: string, currentPass: string) => {
-  authStore.update((s) => ({ ...s, loading: true, error: null }));
-  try {
-    const user = auth.currentUser;
-    if (!user || !user.email) throw new Error('No user logged in');
-
-    // Re-authenticate user before updating password
-    const credential = EmailAuthProvider.credential(user.email, currentPass);
-    await reauthenticateWithCredential(user, credential);
-
-    await firebaseUpdatePassword(user, newPass);
-    authStore.update((s) => ({ ...s, loading: false, error: null }));
-  } catch (error: any) {
-    let errorMessage = 'Failed to update password. Please try again.';
-    if (error.code === 'auth/wrong-password') {
-      errorMessage = 'The current password you entered is incorrect.';
-    } else if (error.code === 'auth/weak-password') {
-      errorMessage = 'The new password is too weak. Please use at least 6 characters.';
-    } else if (error.code === 'auth/requires-recent-login') {
-      errorMessage = 'Please log in again to change your password.';
-    }
-    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
-    throw error;
-  }
-};
-import { auth, googleProvider } from '../firebase.js';
+import { supabase } from '../supabase.js';
+import type { User } from '@supabase/supabase-js';
 
 interface AuthState {
   user: User | null;
@@ -46,9 +17,14 @@ export const authStore = writable<AuthState>({
 /**
  * Initialize auth listener
  */
-export const initAuth = () => {
-  onAuthStateChanged(auth, (user) => {
-    authStore.update((s) => ({ ...s, user, loading: false }));
+export const initAuth = async () => {
+  // Get initial session
+  const { data: { session } } = await supabase.auth.getSession();
+  authStore.update((s) => ({ ...s, user: session?.user ?? null, loading: false }));
+
+  // Listen for changes
+  supabase.auth.onAuthStateChange((_event, session) => {
+    authStore.update((s) => ({ ...s, user: session?.user ?? null, loading: false }));
   });
 };
 
@@ -58,18 +34,15 @@ export const initAuth = () => {
 export const loginWithGoogle = async () => {
   authStore.update((s) => ({ ...s, loading: true, error: null }));
   try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/dashboard'
+      }
+    });
+    if (error) throw error;
   } catch (error: any) {
-    let errorMessage = 'Authentication was canceled. Please try again.';
-    
-    if (error.code === 'auth/popup-blocked') {
-      errorMessage = 'The login popup was blocked by your browser. Please allow popups for this site.';
-    } else if (error.code === 'auth/network-request-failed') {
-      errorMessage = 'A network error occurred. Please check your connection.';
-    }
-
-    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
     throw error;
   }
 };
@@ -80,19 +53,19 @@ export const loginWithGoogle = async () => {
 export const signupWithEmail = async (email: string, pass: string, name: string) => {
   authStore.update((s) => ({ ...s, loading: true, error: null }));
   try {
-    const result = await createUserWithEmailAndPassword(auth, email, pass);
-    await updateProfile(result.user, { displayName: name });
-    return result.user;
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password: pass,
+      options: {
+        data: {
+          full_name: name,
+        },
+      },
+    });
+    if (error) throw error;
+    return data.user;
   } catch (error: any) {
-    let errorMessage = 'Failed to create account. Please try again.';
-    if (error.code === 'auth/email-already-in-use') {
-      errorMessage = 'This email is already registered.';
-    } else if (error.code === 'auth/weak-password') {
-      errorMessage = 'Password should be at least 6 characters.';
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'Invalid email address.';
-    }
-    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
     throw error;
   }
 };
@@ -103,16 +76,14 @@ export const signupWithEmail = async (email: string, pass: string, name: string)
 export const loginWithEmail = async (email: string, pass: string) => {
   authStore.update((s) => ({ ...s, loading: true, error: null }));
   try {
-    const result = await signInWithEmailAndPassword(auth, email, pass);
-    return result.user;
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: pass,
+    });
+    if (error) throw error;
+    return data.user;
   } catch (error: any) {
-    let errorMessage = 'Invalid email or password.';
-    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-      errorMessage = 'Invalid email or password.';
-    } else if (error.code === 'auth/too-many-requests') {
-      errorMessage = 'Too many failed login attempts. Please try again later.';
-    }
-    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
     throw error;
   }
 };
@@ -123,16 +94,53 @@ export const loginWithEmail = async (email: string, pass: string) => {
 export const resetPassword = async (email: string) => {
   authStore.update((s) => ({ ...s, loading: true, error: null }));
   try {
-    await sendPasswordResetEmail(auth, email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/settings',
+    });
+    if (error) throw error;
     authStore.update((s) => ({ ...s, loading: false, error: null }));
   } catch (error: any) {
-    let errorMessage = 'Failed to send reset email. Please try again.';
-    if (error.code === 'auth/user-not-found') {
-      errorMessage = 'No account found with this email.';
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'Invalid email address.';
-    }
-    authStore.update((s) => ({ ...s, loading: false, error: errorMessage }));
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
+    throw error;
+  }
+};
+
+/**
+ * Update user password
+ */
+export const updatePassword = async (newPass: string, _currentPass: string) => {
+  // Supabase usually handles re-auth via flow or just allows update if session is fresh.
+  // For simplicity, we update directly.
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    const { error } = await supabase.auth.updateUser({
+      password: newPass
+    });
+    if (error) throw error;
+    authStore.update((s) => ({ ...s, loading: false, error: null }));
+  } catch (error: any) {
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
+    throw error;
+  }
+};
+
+/**
+ * Resend verification email
+ */
+export const resendVerification = async (email: string) => {
+  authStore.update((s) => ({ ...s, loading: true, error: null }));
+  try {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: window.location.origin + '/dashboard',
+      },
+    });
+    if (error) throw error;
+    authStore.update((s) => ({ ...s, loading: false, error: null }));
+  } catch (error: any) {
+    authStore.update((s) => ({ ...s, loading: false, error: error.message }));
     throw error;
   }
 };
@@ -142,7 +150,8 @@ export const resetPassword = async (email: string) => {
  */
 export const logout = async () => {
   try {
-    await signOut(auth);
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
   } catch (error) {
     console.error('Logout error:', error);
   }

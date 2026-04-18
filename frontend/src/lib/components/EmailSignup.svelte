@@ -11,7 +11,7 @@
     e.preventDefault();
     try {
       await signupWithEmail(email, password, name);
-      goto('/dashboard');
+      goto(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err) {
       console.error('Signup failed', err);
     }

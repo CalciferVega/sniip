@@ -1,28 +1,26 @@
-import { authStore } from '../stores/auth.js';
-import { get } from 'svelte/store';
+import { supabase } from '../supabase.js';
 
 // Default to backend on port 3000
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 /**
  * Universal fetch wrapper for authenticated API calls.
- * Automatically injects the Firebase ID Token in the Authorization header.
+ * Automatically injects the Supabase access token in the Authorization header.
  */
 export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const { user } = get(authStore);
+  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!user) {
+  if (!session) {
     throw new Error('You must be logged in to perform this action.');
   }
 
-  // Ensure the token is fresh (Firebase SDK handles caching/refreshing)
-  const idToken = await user.getIdToken();
+  const token = session.access_token;
 
   const config: RequestInit = {
     ...options,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`,
+      'Authorization': `Bearer ${token}`,
       ...options.headers,
     },
   };

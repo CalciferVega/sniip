@@ -29,7 +29,7 @@
 
   // Fetch usage when menu opens if not already loaded
   $effect(() => {
-    if (isOpen && $authStore.user && !usageStore.usage && !usageStore.loading) {
+    if (isOpen && $authStore.user && !usageStore.usage && !usageStore.loading && !usageStore.error) {
       usageStore.fetchUsage();
     }
   });
