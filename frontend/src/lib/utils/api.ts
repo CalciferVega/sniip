@@ -1,7 +1,7 @@
 import { supabase } from '../supabase.js';
 
-// Default to backend on port 3000
-const API_BASE_URL = import.meta.env.VITE_API_URL
+// Now integrated into SvelteKit routes
+const API_BASE_URL = '/api';
 
 /**
  * Universal fetch wrapper for authenticated API calls.
@@ -25,6 +25,7 @@ export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): 
     },
   };
 
+  // We use relative path since it's now internal to SvelteKit
   const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
 
   if (!response.ok) {
