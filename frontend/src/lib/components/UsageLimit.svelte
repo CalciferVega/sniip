@@ -7,9 +7,23 @@
     resetDate?: string;
   }
 
-  let { used = 2, total = 25, plan = 'free', resetDate = 'Apr 25, 2026' }: Props = $props();
+  let { used = 2, total = 25, plan = 'free', resetDate }: Props = $props();
 
   const percentage = $derived(Math.min((used / total) * 100, 100));
+
+  const formattedResetDate = $derived.by(() => {
+    if (!resetDate) return 'soon';
+    try {
+      const date = new Date(resetDate);
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch {
+      return resetDate;
+    }
+  });
 </script>
 
 <div class="space-y-4 px-1">
@@ -44,7 +58,7 @@
     {/if}
 
     <p class="text-[10px] text-center font-medium text-gray-400 dark:text-gray-500 pt-1">
-      Usage will reset <span class="text-gray-600 dark:text-gray-400 font-bold">{resetDate}</span>
+      Usage will reset <span class="text-gray-600 dark:text-gray-400 font-bold">{formattedResetDate}</span>
     </p>
   </div>
 </div>

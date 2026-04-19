@@ -116,7 +116,12 @@ export class LinkService {
 
     if (insertError) throw new Error(insertError.message);
 
-    return newLink;
+    return {
+      ...newLink,
+      userId: newLink.user_id,
+      originalUrl: newLink.original_url,
+      shortSlug: newLink.short_slug
+    };
   }
 
   /**
@@ -154,7 +159,63 @@ export class LinkService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data;
+    
+    return (data || []).map(link => ({
+      ...link,
+      userId: link.user_id,
+      originalUrl: link.original_url,
+      shortSlug: link.short_slug,
+      _count: {
+        clicksAnalytics: link._count?.[0]?.count || 0
+      }
+    }));
+  }
+
+  /**
+   * Resolves a short slug to its original URL and records a click.
+   */
+  async resolveSlug(slug: string, options: { ip?: string, userAgent?: string, referrer?: string, isQr?: boolean }) {
+    const supabase = createServerClient();
+
+    // 1. Fetch the link
+    const { data: link, error } = await supabase
+      .from('links')
+      .select('id, original_url, status')
+      .eq('short_slug', slug)
+      .single();
+
+    if (error || !link || link.status !== 'ACTIVE') {
+      return null;
+    }
+
+    // 2. Record analytics (Fire and forget in Supabase)
+    // We don't await this to keep the redirect fast
+    this.recordClick(link.id, options);
+
+    return link.original_url;
+  }
+
+  private async recordClick(linkId: string, options: { ip?: string, userAgent?: string, referrer?: string, isQr?: boolean }) {
+    const supabase = createServerClient();
+    
+    // Simple device detection
+    let device = 'desktop';
+    if (options.userAgent) {
+      if (/mobile/i.test(options.userAgent)) device = 'mobile';
+      else if (/tablet/i.test(options.userAgent)) device = 'tablet';
+    }
+
+    await supabase
+      .from('clicks_analytics')
+      .insert({
+        link_id: linkId,
+        ip: options.ip,
+        is_qr: options.isQr || false,
+        device,
+        referrer: options.referrer || 'Direct',
+        // In a real app, we'd use a geoip library or Supabase edge functions for country
+        country: 'Unknown' 
+      });
   }
 }
 

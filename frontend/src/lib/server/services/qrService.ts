@@ -28,7 +28,13 @@ export class QrService {
       .single();
 
     if (qrError) throw qrError;
-    return qrCode;
+    
+    return {
+      ...qrCode,
+      imageUrl: qrCode.image_url,
+      designConfig: qrCode.design_config,
+      linkId: qrCode.link_id
+    };
   }
 
   async getUserQrCodes(userId: string) {
@@ -38,10 +44,24 @@ export class QrService {
     const { data, error } = await supabase
       .from('qr_codes')
       .select('*, links!inner(*)')
-      .eq('links.user_id', userId);
+      .eq('links.user_id', userId)
+      .order('id', { ascending: false });
 
     if (error) throw error;
-    return data;
+    
+    return (data || []).map(qr => ({
+      ...qr,
+      imageUrl: qr.image_url,
+      designConfig: qr.design_config,
+      linkId: qr.link_id,
+      link: qr.links ? {
+        ...qr.links,
+        shortSlug: qr.links.short_slug,
+        originalUrl: qr.links.original_url,
+        userId: qr.links.user_id,
+        createdAt: qr.links.createdAt
+      } : null
+    }));
   }
 }
 
