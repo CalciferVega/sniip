@@ -1,5 +1,6 @@
 import { createServerClient } from '../supabase.js';
 import { slugGenerator } from './slugGenerator.js';
+import geoip from 'geoip-lite';
 
 interface CreateLinkOptions {
   userId: string;
@@ -205,6 +206,17 @@ export class LinkService {
       else if (/tablet/i.test(options.userAgent)) device = 'tablet';
     }
 
+    // Country detection using geoip-lite
+    let country = 'Unknown';
+    if (options.ip) {
+      // Handle x-forwarded-for which can be a comma-separated list
+      const firstIp = options.ip.split(',')[0].trim();
+      const geo = geoip.lookup(firstIp);
+      if (geo) {
+        country = geo.country; // e.g. "US", "ES", etc.
+      }
+    }
+
     await supabase
       .from('clicks_analytics')
       .insert({
@@ -213,8 +225,7 @@ export class LinkService {
         is_qr: options.isQr || false,
         device,
         referrer: options.referrer || 'Direct',
-        // In a real app, we'd use a geoip library or Supabase edge functions for country
-        country: 'Unknown' 
+        country 
       });
   }
 }
