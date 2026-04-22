@@ -309,9 +309,9 @@
           >
             {#if isSubmitting}
               <Loader2 class="w-4 h-4 animate-spin" />
-              Creating...
+              Saving...
             {:else}
-              Create Link
+              Save and Apply
             {/if}
           </button>
         </div>
