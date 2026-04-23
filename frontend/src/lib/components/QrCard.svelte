@@ -4,10 +4,12 @@
     MoreHorizontal,
     Pencil,
     Archive,
-    Download
+    Download,
+    Hash
   } from 'lucide-svelte';
   import { toast } from '$lib/stores/toast.svelte.js';
   import { supabase } from '$lib/supabase';
+  import { getTagColor } from '$lib/utils/tags';
 
   interface Props {
     qr: {
@@ -111,9 +113,12 @@
       </div>
 
       {#if qr.link?.tags && qr.link?.tags.length > 0}
-        <div class="flex flex-wrap items-center gap-1.5">
+        <div class="flex flex-wrap items-center gap-1.5 pt-1">
           {#each qr.link.tags as tag}
-            <span class="text-[10px] font-bold bg-slate-50 dark:bg-gray-800 text-slate-500 dark:text-gray-400 px-2 py-0.5 rounded-full border border-slate-100 dark:border-gray-700">{tag}</span>
+            <span class="text-[10px] font-bold bg-slate-50 dark:bg-gray-800 text-slate-500 dark:text-gray-400 px-2.5 py-1 rounded-full border border-slate-100 dark:border-gray-700 flex items-center gap-1">
+              <Hash size={10} class="opacity-70" />
+              {tag}
+            </span>
           {/each}
         </div>
       {/if}

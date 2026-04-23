@@ -1,28 +1,10 @@
 <script lang="ts">
   import { X, Hash } from 'lucide-svelte';
   import { fade, scale } from 'svelte/transition';
+  import { getTagColor } from '$lib/utils/tags';
 
   let { tags = $bindable([]) } = $props<{ tags: string[] }>();
   let inputValue = $state('');
-
-  const colors = [
-    'bg-blue-600',
-    'bg-emerald-600',
-    'bg-purple-600',
-    'bg-amber-600',
-    'bg-rose-600',
-    'bg-indigo-600',
-    'bg-cyan-600',
-    'bg-fuchsia-600'
-  ];
-
-  function getTagColor(tag: string) {
-    let hash = 0;
-    for (let i = 0; i < tag.length; i++) {
-      hash = tag.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return colors[Math.abs(hash) % colors.length];
-  }
 
   function handleKeyDown(e: KeyboardEvent) {
     if (e.key === ' ' || e.key === 'Enter') {
